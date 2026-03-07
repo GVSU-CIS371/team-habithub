@@ -20,12 +20,12 @@ Your **Term Project** is an essential part of the course. Please review the inst
 Best of luck! 🚀  
 
 
-HabitHub Lite — Simple Habit Tracker with Shared Templates
+HabitHub — Simple Habit Tracker with Shared Templates
 
 Minimal, clean habit tracker built with Vue 3 + TypeScript, Pinia, Vue Router, Vuetify, and Firebase (Auth, Firestore, Hosting).
 
-Team: [Name A] • [Name B] • [Name C] • [Name D] (Senior CS)
-Repository: [GitHub Classroom repo URL]
+Team: Joshua V • Hayden O • James B • Dominik P
+Repository: [\[GitHub Classroom repo URL\]](https://github.com/GVSU-CIS371/cis371-w26-team-term-project)
 Live Demo: [Production URL]
 Status: MVP scope targeting course requirements
 
@@ -58,7 +58,7 @@ Table of Contents
 
 
 Overview
-HabitHub Lite helps users establish routines with the essentials only:
+HabitHub helps users establish routines with the essentials only:
 
 Browse a shared template library (read‑only) for common habits.
 Create personal habits (from scratch or using template details).
@@ -127,7 +127,7 @@ Firebase account and project with Firestore and Auth (Email/Password) enabled
 Git (for cloning and collaboration)
 
 Local Setup
-Shell# 1) Clone the repogit clone [REPO_URL]cd habithub-lite# 2) Install dependenciesnpm install# 3) Create .env file with Firebase config (see below)cp .env.example .env# 4) Run in developmentnpm run devShow more lines
+Shell# 1) Clone the repogit clone [REPO_URL]cd team-habithub# 2) Install dependenciesnpm install# 3) Create .env file with Firebase config (see below)cp .env.example .env# 4) Run in developmentnpm run devShow more lines
 Environment Variables
 Create a .env file in the project root with your Firebase web app config.
 All keys must be prefixed with VITE_ for Vite to expose them.
@@ -159,7 +159,7 @@ Ensure the production domain is added to Auth → Authorized domains.
 
 
 Project Structure
-habithub-lite/
+team-habithub/
 ├─ src/
 │  ├─ main.ts
 │  ├─ App.vue
