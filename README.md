@@ -168,14 +168,20 @@ service cloud.firestore {
 
     // Private habits
     match /habits/{habitId} {
-      allow read, write: if isOwner(resource.data.owner_id);
+      allow read: if isOwner(resource.data.owner_id);
       allow create: if signedIn() && request.resource.data.owner_id == request.auth.uid;
+      allow update: if isOwner(resource.data.owner_id)
+                    && request.resource.data.owner_id == resource.data.owner_id;
+      allow delete: if isOwner(resource.data.owner_id);
     }
 
     // Private logs
     match /habit_logs/{logId} {
-      allow read, write: if isOwner(resource.data.owner_id);
+      allow read: if isOwner(resource.data.owner_id);
       allow create: if signedIn() && request.resource.data.owner_id == request.auth.uid;
+      allow update: if isOwner(resource.data.owner_id)
+                    && request.resource.data.owner_id == resource.data.owner_id;
+      allow delete: if isOwner(resource.data.owner_id);
     }
   }
 }
