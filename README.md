@@ -195,7 +195,7 @@ service cloud.firestore {
 
 ```sh
 # 1) Clone the repo
-git clone https://github.com/GVSU-CIS371/cis371-w26-team-term-project.git
+git clone https://github.com/GVSU-CIS371/cis371-w26-team-term-project.git team-habithub
 cd team-habithub
 
 # 2) Install dependencies
