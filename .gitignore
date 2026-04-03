@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+.firebase/
+coverage/
+*.log
+.vscode/
+.DS_Store
