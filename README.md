@@ -7,13 +7,14 @@ Minimal, clean habit tracker built with Vue 3 + TypeScript, Pinia, Vue Router, V
 **Team:** Joshua V • Hayden O • James B • Dominik P  
 **Repository:** [GVSU-CIS371/cis371-w26-team-term-project](https://github.com/GVSU-CIS371/cis371-w26-team-term-project)  
 **Live Demo:** _Production URL (add after deploy)_  
-**Status:** MVP scope targeting course requirements
+**Status:** Scaffold complete, feature implementation in progress (updated 2026-04-03)
 
 ---
 
 ## Table of Contents
 
 - [Overview](#overview)
+- [Current Status](#current-status)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
@@ -32,6 +33,37 @@ Minimal, clean habit tracker built with Vue 3 + TypeScript, Pinia, Vue Router, V
 - [Testing](#testing)
 - [Accessibility & UX](#accessibility--ux)
 - [Course Requirements Mapping](#course-requirements-mapping)
+
+---
+
+## Current Status
+
+The codebase now includes a full typed scaffold and project wiring:
+
+- Vue 3 + TypeScript + Vite app bootstrapped
+- Router and route guard skeleton in place
+- Pinia stores and Firebase service files created with typed function signatures
+- View and component shells created for all planned routes
+- Firebase config files (`firebase.json`, `firestore.rules`, `.env.example`) added
+- Vitest setup and placeholder tests added
+
+What still needs to be implemented:
+
+- Replace TODO service placeholders with Firebase Auth and Firestore queries/writes
+- Connect form validation rules and user-facing error messages
+- Finish auth session flow and profile creation/update logic
+- Implement habit and log CRUD persistence end-to-end
+- Seed template documents and verify template detail flows
+- Add/expand unit tests for stores, services, and key UI behavior
+- Deploy to Firebase Hosting and set production URL
+
+Suggested team split (parallel-friendly):
+
+- Auth + guards + profile docs
+- Templates read/list/detail + seed script/manual seed guide
+- Habits CRUD and archive behavior
+- Logs CRUD and "Completed Today" flow
+- Testing + deployment + polish
 
 ---
 
@@ -193,7 +225,8 @@ service cloud.firestore {
 
 ### Prerequisites
 
-- Node.js 18+ and npm 9+
+- Node.js 22.12+ (project currently verified on Node 22.22.2)
+- npm 10+
 - Firebase account and project with Firestore and Auth (Email/Password) enabled
 - Git (for cloning and collaboration)
 
@@ -322,14 +355,14 @@ team-habithub/
 
 ## Routing
 
-| Route            | Description                                      |
-| ---------------- | ------------------------------------------------ |
-| `/auth`          | Login / Register                                 |
-| `/templates`     | Shared template list                             |
-| `/templates/:id` | Template details                                 |
-| `/habits`        | My habits (list + CRUD)                          |
-| `/habits/:id`    | Habit details + "Completed Today" + log list     |
-| `/`              | Redirect to `/habits` (if authed) or `/auth`     |
+| Route            | Description                                  |
+| ---------------- | -------------------------------------------- |
+| `/auth`          | Login / Register                             |
+| `/templates`     | Shared template list                         |
+| `/templates/:id` | Template details                             |
+| `/habits`        | My habits (list + CRUD)                      |
+| `/habits/:id`    | Habit details + "Completed Today" + log list |
+| `/`              | Redirect to `/habits` (if authed) or `/auth` |
 
 Route guards redirect unauthenticated users to `/auth` for all private routes.
 
@@ -339,12 +372,12 @@ Route guards redirect unauthenticated users to `/auth` for all private routes.
 
 Pinia stores encapsulate logic and Firestore interactions behind service functions:
 
-| Store          | Responsibilities                                                      |
-| -------------- | --------------------------------------------------------------------- |
-| `auth.ts`      | Current user, login, logout, register, route guards                   |
-| `templates.ts` | Fetch paged list, fetch by id                                         |
-| `habits.ts`    | CRUD for habits (scoped to `owner_id`)                                |
-| `logs.ts`      | Create "Completed Today", list by habit and date range, edit, delete  |
+| Store          | Responsibilities                                                     |
+| -------------- | -------------------------------------------------------------------- |
+| `auth.ts`      | Current user, login, logout, register, route guards                  |
+| `templates.ts` | Fetch paged list, fetch by id                                        |
+| `habits.ts`    | CRUD for habits (scoped to `owner_id`)                               |
+| `logs.ts`      | Create "Completed Today", list by habit and date range, edit, delete |
 
 ---
 
@@ -406,15 +439,15 @@ docs: update readme
 
 ## Course Requirements Mapping
 
-| Requirement           | Implementation                                                                     | Weight |
-| --------------------- | ---------------------------------------------------------------------------------- | ------ |
-| Complete & Realistic  | Shared templates → personal habits → daily logs; clean, responsive UI              | 10%    |
-| User Authentication   | Firebase Auth (email/password), login/logout, protected routes                     | 10%    |
-| Cloud Database        | Firestore with `habit_templates`, `users`, `habits`, `habit_logs`                  | 10%    |
-| Private & Shared Data | Shared: `habit_templates` (public read). Private: `habits`, `habit_logs`, `users` (owner write) | 10% |
-| CRUD                  | Habits: create/read/update/delete. Logs: create/read/update/delete                 | 10%    |
-| Modern Frontend       | Vue 3 + TypeScript + Pinia + Vue Router                                            | 10%    |
-| Styling               | Vuetify, responsive layout, professional polish                                    | 10%    |
-| Git Repo              | GitHub Classroom repo with all contributors                                        | req.   |
-| Weekly Progress       | Feature branches, PRs, regular commits from all members                            | 10%    |
-| In-Class Presentation | Live demo of full user flow                                                        | 10%    |
+| Requirement           | Implementation                                                                                  | Weight |
+| --------------------- | ----------------------------------------------------------------------------------------------- | ------ |
+| Complete & Realistic  | Shared templates → personal habits → daily logs; clean, responsive UI                           | 10%    |
+| User Authentication   | Firebase Auth (email/password), login/logout, protected routes                                  | 10%    |
+| Cloud Database        | Firestore with `habit_templates`, `users`, `habits`, `habit_logs`                               | 10%    |
+| Private & Shared Data | Shared: `habit_templates` (public read). Private: `habits`, `habit_logs`, `users` (owner write) | 10%    |
+| CRUD                  | Habits: create/read/update/delete. Logs: create/read/update/delete                              | 10%    |
+| Modern Frontend       | Vue 3 + TypeScript + Pinia + Vue Router                                                         | 10%    |
+| Styling               | Vuetify, responsive layout, professional polish                                                 | 10%    |
+| Git Repo              | GitHub Classroom repo with all contributors                                                     | req.   |
+| Weekly Progress       | Feature branches, PRs, regular commits from all members                                         | 10%    |
+| In-Class Presentation | Live demo of full user flow                                                                     | 10%    |
