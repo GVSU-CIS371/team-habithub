@@ -7,7 +7,7 @@ Minimal, clean habit tracker built with Vue 3 + TypeScript, Pinia, Vue Router, V
 **Team:** Joshua V • Hayden O • James B • Dominik P  
 **Repository:** [GVSU-CIS371/cis371-w26-team-term-project](https://github.com/GVSU-CIS371/cis371-w26-team-term-project)  
 **Live Demo:** _Production URL (add after deploy)_  
-**Status:** Scaffold complete, feature implementation in progress (updated 2026-04-03)
+**Status:** Core services partially implemented, feature integration in progress (updated 2026-04-14)
 
 ---
 
@@ -43,26 +43,30 @@ The codebase now includes a full typed scaffold and project wiring:
 - Vue 3 + TypeScript + Vite app bootstrapped
 - Router and route guard skeleton in place
 - Pinia stores and Firebase service files created with typed function signatures
+- Auth service login + session lookup implemented (`loginWithEmail`, `getCurrentUser`)
+- Habits service CRUD implemented (`list`, `getById`, `create`, `update`, `delete`)
 - View and component shells created for all planned routes
 - Firebase config files (`firebase.json`, `firestore.rules`, `.env.example`) added
 - Vitest setup and placeholder tests added
 
 What still needs to be implemented:
 
-- Replace TODO service placeholders with Firebase Auth and Firestore queries/writes
+- Implement remaining auth service methods (`registerWithEmail`, `logoutCurrentUser`)
+- Implement templates service (`listTemplates`, `getTemplateById`)
+- Implement logs service CRUD/helpers (`list`, `create`, `complete today`, `update`, `delete`)
 - Connect form validation rules and user-facing error messages
-- Finish auth session flow and profile creation/update logic
-- Implement habit and log CRUD persistence end-to-end
+- Finish profile creation/update logic
+- Wire implemented habits service paths through full UI flow and verify error handling
 - Seed template documents and verify template detail flows
-- Add/expand unit tests for stores, services, and key UI behavior
+- Update scaffold tests that still assert TODO placeholders, then add store/service/UI coverage
 - Deploy to Firebase Hosting and set production URL
 
 Suggested team split (parallel-friendly):
 
-- Auth + guards + profile docs
+- Auth register/logout + profile docs
 - Templates read/list/detail + seed script/manual seed guide
-- Habits CRUD and archive behavior
 - Logs CRUD and "Completed Today" flow
+- Habits flow QA + test updates
 - Testing + deployment + polish
 
 ---
