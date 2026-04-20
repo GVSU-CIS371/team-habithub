@@ -23,6 +23,8 @@ export interface UpdateLogInput {
   note?: string;
 }
 
+const VALID_LOG_STATUSES: readonly HabitLogStatus[] = ['completed'];
+
 function requireCurrentUid(): string {
   const uid = firebaseAuth.currentUser?.uid;
   if (!uid) {
@@ -32,15 +34,21 @@ function requireCurrentUid(): string {
   return uid;
 }
 
-function mapLogDoc(logId: string, data: Record<string, unknown>): HabitLog {
-  const status: HabitLogStatus = data.status === 'completed' ? data.status : 'completed';
+function normalizeLogStatus(status: unknown): HabitLogStatus {
+  if (typeof status === 'string' && VALID_LOG_STATUSES.includes(status as HabitLogStatus)) {
+    return status as HabitLogStatus;
+  }
 
+  return 'completed';
+}
+
+function mapLogDoc(logId: string, data: Record<string, unknown>): HabitLog {
   return {
     id: logId,
     owner_id: data.owner_id as string,
     habit_id: data.habit_id as string,
     date: data.date as string,
-    status,
+    status: normalizeLogStatus(data.status),
     note: (data.note as string) ?? '',
     created_at: data.created_at as number,
   };
