@@ -1,0 +1,7 @@
+:root {
+  --habit-surface-border: #d5d9df;
+}
+
+.border-sm {
+  border: 1px solid var(--habit-surface-border);
+}
