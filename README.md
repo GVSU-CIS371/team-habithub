@@ -7,7 +7,7 @@ Minimal, clean habit tracker built with Vue 3 + TypeScript, Pinia, Vue Router, V
 **Team:** Joshua V • Hayden O • James B • Dominik P  
 **Repository:** [GVSU-CIS371/cis371-w26-team-term-project](https://github.com/GVSU-CIS371/cis371-w26-team-term-project)  
 **Live Demo:** _Production URL (add after deploy)_  
-**Status:** Core services partially implemented, feature integration in progress (updated 2026-04-14)
+**Status:** Core services mostly implemented, feature integration in progress (updated 2026-04-20)
 
 ---
 
@@ -45,6 +45,7 @@ The codebase now includes a full typed scaffold and project wiring:
 - Pinia stores and Firebase service files created with typed function signatures
 - Auth service login + session lookup implemented (`loginWithEmail`, `getCurrentUser`)
 - Habits service CRUD implemented (`list`, `getById`, `create`, `update`, `delete`)
+- Logs service CRUD/helpers implemented (`listLogsByHabit`, `createLog`, `completeHabitToday`, `updateLog`, `deleteLog`)
 - View and component shells created for all planned routes
 - Firebase config files (`firebase.json`, `firestore.rules`, `.env.example`) added
 - Vitest setup and placeholder tests added
@@ -53,21 +54,20 @@ What still needs to be implemented:
 
 - Implement remaining auth service methods (`registerWithEmail`, `logoutCurrentUser`)
 - Implement templates service (`listTemplates`, `getTemplateById`)
-- Implement logs service CRUD/helpers (`list`, `create`, `complete today`, `update`, `delete`)
 - Connect form validation rules and user-facing error messages
 - Finish profile creation/update logic
 - Wire implemented habits service paths through full UI flow and verify error handling
+- Wire implemented logs service paths through full UI flow and verify error handling
 - Seed template documents and verify template detail flows
 - Update scaffold tests that still assert TODO placeholders, then add store/service/UI coverage
 - Deploy to Firebase Hosting and set production URL
 
 Suggested team split (parallel-friendly):
 
-- Auth register/logout + profile docs
-- Templates read/list/detail + seed script/manual seed guide
-- Logs CRUD and "Completed Today" flow
-- Habits flow QA + test updates
-- Testing + deployment + polish
+- Joshua V: Implement remaining auth methods (`registerWithEmail`, `logoutCurrentUser`), finish profile creation/update logic, and verify auth guard behavior end-to-end.
+- Hayden O: Implement templates service (`listTemplates`, `getTemplateById`), seed `habit_templates`, and verify list/detail template flows.
+- James B: Wire and QA habits/logs UI flows (including validation + user-facing errors), then patch any flow-level regressions.
+- Dominik P: Update/expand scaffold tests (services/stores/UI), run full pre-merge checks (`type-check`, `lint`, `test`), and handle Firebase Hosting deploy + production URL update.
 
 ---
 
@@ -381,7 +381,7 @@ Pinia stores encapsulate logic and Firestore interactions behind service functio
 | `auth.ts`      | Current user, login, logout, register, route guards                  |
 | `templates.ts` | Fetch paged list, fetch by id                                        |
 | `habits.ts`    | CRUD for habits (scoped to `owner_id`)                               |
-| `logs.ts`      | Create "Completed Today", list by habit and date range, edit, delete |
+| `logs.ts`      | Create "Completed Today", list by habit, edit, delete                 |
 
 ---
 
