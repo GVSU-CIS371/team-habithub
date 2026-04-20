@@ -1,10 +1,14 @@
 import type { AuthUser } from '@/types/models';
 import {
+  createUserWithEmailAndPassword,
   onAuthStateChanged,
+  signOut,
   signInWithEmailAndPassword,
+  updateProfile,
   type User as FirebaseUser,
 } from 'firebase/auth';
-import { firebaseAuth } from '@/services/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { firebaseAuth, firestoreDb } from '@/services/firebase';
 
 export interface RegisterInput {
   email: string;
@@ -17,6 +21,12 @@ export interface LoginInput {
   password: string;
 }
 
+interface UserProfileDoc {
+  display_name: string;
+  photo_url: string;
+  created_at: number;
+}
+
 function mapFirebaseUser(user: FirebaseUser): AuthUser {
   return {
     uid: user.uid,
@@ -24,9 +34,48 @@ function mapFirebaseUser(user: FirebaseUser): AuthUser {
   };
 }
 
+async function upsertUserProfile(
+  uid: string,
+  displayName: string | undefined,
+  photoUrl: string | undefined,
+): Promise<void> {
+  const userRef = doc(firestoreDb, 'users', uid);
+  const existingSnapshot = await getDoc(userRef);
+  const existingData = existingSnapshot.exists()
+    ? (existingSnapshot.data() as Partial<UserProfileDoc>)
+    : null;
+
+  const createdAt =
+    typeof existingData?.created_at === 'number' ? existingData.created_at : Date.now();
+  const normalizedDisplayName = displayName?.trim() || existingData?.display_name || '';
+  const normalizedPhotoUrl = photoUrl?.trim() || existingData?.photo_url || '';
+
+  await setDoc(
+    userRef,
+    {
+      display_name: normalizedDisplayName,
+      photo_url: normalizedPhotoUrl,
+      created_at: createdAt,
+    },
+    { merge: true },
+  );
+}
+
 export async function registerWithEmail(input: RegisterInput): Promise<AuthUser> {
-  void input;
-  throw new Error('TODO: implement registerWithEmail using Firebase Auth.');
+  const credentials = await createUserWithEmailAndPassword(
+    firebaseAuth,
+    input.email,
+    input.password,
+  );
+  const { user } = credentials;
+
+  if (input.displayName?.trim()) {
+    await updateProfile(user, { displayName: input.displayName.trim() });
+  }
+
+  await upsertUserProfile(user.uid, input.displayName, user.photoURL ?? undefined);
+
+  return mapFirebaseUser(user);
 }
 
 export async function loginWithEmail(input: LoginInput): Promise<AuthUser> {
@@ -35,7 +84,7 @@ export async function loginWithEmail(input: LoginInput): Promise<AuthUser> {
 }
 
 export async function logoutCurrentUser(): Promise<void> {
-  throw new Error('TODO: implement logoutCurrentUser using Firebase Auth.');
+  await signOut(firebaseAuth);
 }
 
 export async function getCurrentUser(): Promise<AuthUser | null> {
@@ -44,7 +93,8 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
   }
 
   return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(
+    let unsubscribe: () => void = () => {};
+    unsubscribe = onAuthStateChanged(
       firebaseAuth,
       (user) => {
         unsubscribe();
