@@ -1,4 +1,4 @@
-import type { EntityId, HabitLog } from '@/types/models';
+import type { EntityId, HabitLog, HabitLogStatus } from '@/types/models';
 import {
   addDoc,
   collection,
@@ -33,12 +33,14 @@ function requireCurrentUid(): string {
 }
 
 function mapLogDoc(logId: string, data: Record<string, unknown>): HabitLog {
+  const status: HabitLogStatus = data.status === 'completed' ? data.status : 'completed';
+
   return {
     id: logId,
     owner_id: data.owner_id as string,
     habit_id: data.habit_id as string,
     date: data.date as string,
-    status: data.status as 'completed',
+    status,
     note: (data.note as string) ?? '',
     created_at: data.created_at as number,
   };
