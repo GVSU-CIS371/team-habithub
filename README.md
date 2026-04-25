@@ -54,7 +54,7 @@ The codebase now includes a full typed scaffold and project wiring:
 Assigned work by owner:
 
 - Joshua V: ~~Implement remaining auth methods (`registerWithEmail`, `logoutCurrentUser`), finish profile creation/update logic, and verify auth guard behavior end-to-end.~~
-- Hayden O: Implement templates service (`listTemplates`, `getTemplateById`), seed `habit_templates`, and verify list/detail template flows.
+- Hayden O: Implemented templates services (`listTemplates`, `getTemplateById`), seeded `habit_templates`, and verified list/detail template flows. Additionally, assisted with Firebase setup, debugging application startup issues, and connecting/implementing the "Use template" flow to habit creation.
 - James B: Wire and QA habits/logs UI flows (including validation + user-facing errors), then patch any flow-level regressions.
 - Dominik P: Update/expand scaffold tests (services/stores/UI), run full pre-merge checks (`type-check`, `lint`, `test`), and handle Firebase Hosting deploy + production URL update.
 
