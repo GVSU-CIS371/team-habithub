@@ -23,21 +23,18 @@ function mapTemplateDoc(templateId: string, data: Record<string, unknown>): Habi
     description: data.description as string,
     tags: (data.tags as string[]) ?? [],
     created_by: (data.created_by as string) ?? 'system',
-    created_at: data.created_at as number,
+    created_at: Number(data.created_at ?? Date.now()),
   };
 }
 
-export async function listTemplates(input: ListTemplatesInput): Promise<PageResult<HabitTemplate>> {
+export async function listTemplates(
+  input: ListTemplatesInput,
+): Promise<PageResult<HabitTemplate>> {
   const pageSize = input.pageSize > 0 ? input.pageSize : 8;
   const templatesRef = collection(firestoreDb, 'habit_templates');
 
   const templatesQuery = input.cursor
-    ? query(
-        templatesRef,
-        orderBy('title'),
-        startAfter(input.cursor.value),
-        limit(pageSize),
-      )
+    ? query(templatesRef, orderBy('title'), startAfter(input.cursor.value), limit(pageSize))
     : query(templatesRef, orderBy('title'), limit(pageSize));
 
   const snapshot = await getDocs(templatesQuery);

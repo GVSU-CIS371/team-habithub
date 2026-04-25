@@ -1,10 +1,5 @@
 import type { Pinia } from 'pinia';
 import { createRouter, createWebHistory } from 'vue-router';
-import AuthView from '@/views/AuthView.vue';
-import TemplatesView from '@/views/TemplatesView.vue';
-import TemplateDetailView from '@/views/TemplateDetailView.vue';
-import MyHabitsView from '@/views/MyHabitsView.vue';
-import HabitDetailView from '@/views/HabitDetailView.vue';
 import { useAuthStore } from '@/stores/auth';
 
 const router = createRouter({
@@ -12,37 +7,37 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/habits',
+      redirect: '/templates',
     },
     {
       path: '/auth',
       name: 'auth',
-      component: AuthView,
+      component: () => import('@/views/AuthView.vue'),
       meta: { public: true },
     },
     {
       path: '/templates',
       name: 'templates',
-      component: TemplatesView,
+      component: () => import('@/views/TemplatesView.vue'),
       meta: { public: true },
     },
     {
       path: '/templates/:id',
       name: 'template-detail',
-      component: TemplateDetailView,
+      component: () => import('@/views/TemplateDetailView.vue'),
       props: true,
       meta: { public: true },
     },
     {
       path: '/habits',
       name: 'habits',
-      component: MyHabitsView,
+      component: () => import('@/views/MyHabitsView.vue'),
       meta: { requiresAuth: true },
     },
     {
       path: '/habits/:id',
       name: 'habit-detail',
-      component: HabitDetailView,
+      component: () => import('@/views/HabitDetailView.vue'),
       props: true,
       meta: { requiresAuth: true },
     },
@@ -53,16 +48,16 @@ export function setupAuthGuard(targetRouter: typeof router, pinia: Pinia): void 
   targetRouter.beforeEach(async (to) => {
     const authStore = useAuthStore(pinia);
 
+    if (to.meta.public) {
+      return true;
+    }
+
     if (!authStore.hasCheckedSession) {
       await authStore.initializeAuthState();
     }
 
     if (to.meta.requiresAuth && !authStore.isAuthenticated) {
       return { name: 'auth' };
-    }
-
-    if (to.name === 'auth' && authStore.isAuthenticated) {
-      return { name: 'habits' };
     }
 
     return true;
