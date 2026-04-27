@@ -6,7 +6,7 @@ Minimal, clean habit tracker built with Vue 3 + TypeScript, Pinia, Vue Router, V
 
 **Team:** Joshua V • Hayden O • James B • Dominik P  
 **Repository:** [GVSU-CIS371/cis371-w26-team-term-project](https://github.com/GVSU-CIS371/cis371-w26-team-term-project)  
-**Live Demo:** _Production URL (add after deploy)_  
+**Live Demo:** https://gvsu-cis371.github.io/templates
 **Status:** Core services implemented, integration/testing in progress (updated 2026-04-20)
 
 ---
