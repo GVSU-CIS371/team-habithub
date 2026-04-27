@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+
+    // Shared templates are read-only from the client.
+    match /habit_templates/{id} {
+      allow read: if true;
+      allow create, update, delete: if false;
+    }
+
+    // Public profile read, owner write.
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if isOwner(userId);
+    }
+
+    // Private habits scoped to owner_id.
+    match /habits/{habitId} {
+      allow read: if isOwner(resource.data.owner_id);
+      allow create: if signedIn() && request.resource.data.owner_id == request.auth.uid;
+      allow update: if isOwner(resource.data.owner_id)
+                    && request.resource.data.owner_id == resource.data.owner_id;
+      allow delete: if isOwner(resource.data.owner_id);
+    }
+
+    // Private logs scoped to owner_id.
+    match /habit_logs/{logId} {
+      allow read: if isOwner(resource.data.owner_id);
+      allow create: if signedIn() && request.resource.data.owner_id == request.auth.uid;
+      allow update: if isOwner(resource.data.owner_id)
+                    && request.resource.data.owner_id == resource.data.owner_id;
+      allow delete: if isOwner(resource.data.owner_id);
+    }
+  }
+}
